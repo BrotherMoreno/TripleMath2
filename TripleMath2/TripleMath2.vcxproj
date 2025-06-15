@@ -157,8 +157,16 @@
     <EmbeddedResource Include="MainMenuForm.resx">
       <DependentUpon>MainMenuForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RankingForm.resx">
+      <DependentUpon>RankingForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartForm.resx">
+      <DependentUpon>StartForm.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="FondoHorizontalJuego.jpg" />
+    <Image Include="Instrucciones.jpg" />
     <Image Include="TripleMath.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

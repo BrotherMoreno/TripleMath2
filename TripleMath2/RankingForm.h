@@ -64,14 +64,22 @@ namespace TripleMath {
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(RankingForm::typeid));
 			this->SuspendLayout();
+			// 
+			// RankingForm
+			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(500, 600);
+			this->Cursor = System::Windows::Forms::Cursors::Default;
 			this->Name = L"RankingForm";
 			this->Text = L"Ranking";
 			this->Load += gcnew System::EventHandler(this, &RankingForm::RankingForm_Load);
 			this->ResumeLayout(false);
+
 		}
 #pragma endregion
 
