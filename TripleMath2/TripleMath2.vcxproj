@@ -151,6 +151,9 @@
     <ClInclude Include="UsuarioPuntaje.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreditosForm.resx">
+      <DependentUpon>CreditosForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InstruccionesForm.resx">
       <DependentUpon>InstruccionesForm.h</DependentUpon>
     </EmbeddedResource>
@@ -165,6 +168,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Creditos.jpg" />
     <Image Include="FondoHorizontalJuego.jpg" />
     <Image Include="Instrucciones.jpg" />
     <Image Include="TripleMath.png" />

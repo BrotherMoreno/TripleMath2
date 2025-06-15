@@ -17,6 +17,8 @@ namespace TripleMath {
 		// Lista estática para mantener el ranking entre partidas
 		static List<UsuarioPuntaje^>^ ranking = gcnew List<UsuarioPuntaje^>();
 
+	public:
+
 		// Variable estática para guardar el usuario actual
 		static String^ usuarioActual = nullptr;
 
@@ -70,9 +72,7 @@ namespace TripleMath {
 			// RankingForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;   
 			this->ClientSize = System::Drawing::Size(500, 600);
 			this->Cursor = System::Windows::Forms::Cursors::Default;
 			this->Name = L"RankingForm";
