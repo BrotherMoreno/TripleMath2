@@ -163,6 +163,9 @@
     <EmbeddedResource Include="RankingForm.resx">
       <DependentUpon>RankingForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RegistroUsuarioForm.resx">
+      <DependentUpon>RegistroUsuarioForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StartForm.resx">
       <DependentUpon>StartForm.h</DependentUpon>
     </EmbeddedResource>
@@ -170,6 +173,7 @@
   <ItemGroup>
     <Image Include="Creditos.jpg" />
     <Image Include="FondoHorizontalJuego.jpg" />
+    <Image Include="fondoV.jpg" />
     <Image Include="Instrucciones.jpg" />
     <Image Include="TripleMath.png" />
   </ItemGroup>

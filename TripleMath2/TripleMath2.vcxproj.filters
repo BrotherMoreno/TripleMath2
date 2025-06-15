@@ -76,5 +76,8 @@
     <Image Include="Creditos.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="fondoV.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

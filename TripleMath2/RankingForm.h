@@ -28,13 +28,10 @@ namespace TripleMath {
 			this->DoubleBuffered = true;
 			this->ClientSize = System::Drawing::Size(500, 600);
 		}
-
-		// Método para registrar el usuario actual (llámalo al presionar "Play")
 		static void RegistrarUsuario(String^ nombre) {
 			usuarioActual = nombre;
 		}
 
-		// Método para agregar un usuario y puntaje al ranking (llámalo al terminar la partida)
 		static void AgregarUsuarioPuntajeActual(int puntaje) {
 			if (!String::IsNullOrEmpty(usuarioActual)) {
 				ranking->Add(gcnew UsuarioPuntaje(usuarioActual, puntaje));
