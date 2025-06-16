@@ -1,5 +1,5 @@
 #pragma once
-#include "UsuarioPuntaje.h" // Incluye la clase de usuario y puntaje
+#include "UsuarioPuntaje.h" 
 using namespace System::Collections::Generic;
 
 namespace TripleMath {
@@ -14,12 +14,12 @@ namespace TripleMath {
 	public ref class RankingForm : public System::Windows::Forms::Form
 	{
 	public:
-		// Lista estática para mantener el ranking entre partidas
+	
 		static List<UsuarioPuntaje^>^ ranking = gcnew List<UsuarioPuntaje^>();
 
 	public:
 
-		// Variable estática para guardar el usuario actual
+
 		static String^ usuarioActual = nullptr;
 
 		RankingForm(void)
@@ -27,7 +27,7 @@ namespace TripleMath {
 			InitializeComponent();
 			this->DoubleBuffered = true;
 			this->ClientSize = System::Drawing::Size(500, 600);
-			// Cargar la imagen de fondo (ajusta el nombre si es necesario)
+
 			try {
 				this->fondo = Image::FromFile("FondoHorizontalJuego.jpg");
 			}
@@ -36,24 +36,20 @@ namespace TripleMath {
 			}
 		}
 
-		// Método para registrar el usuario actual (llámalo al presionar "Play")
+
 		static void RegistrarUsuario(String^ nombre) {
 			usuarioActual = nombre;
 		}
-
-		// Método para agregar un usuario y puntaje al ranking (llámalo al terminar la partida)
 		static void AgregarUsuarioPuntajeActual(int puntaje) {
 			if (!String::IsNullOrEmpty(usuarioActual)) {
 				ranking->Add(gcnew UsuarioPuntaje(usuarioActual, puntaje));
 			}
 		}
 
-		// Método para agregar cualquier usuario y puntaje al ranking (opcional)
 		void AgregarUsuarioPuntaje(String^ nombre, int puntaje) {
 			ranking->Add(gcnew UsuarioPuntaje(nombre, puntaje));
 		}
 
-		// --- FUNCIÓN AUXILIAR PARA ORDENAR ---
 		static int CompararUsuarios(UsuarioPuntaje^ a, UsuarioPuntaje^ b) {
 			return b->puntaje.CompareTo(a->puntaje);
 		}
@@ -83,7 +79,7 @@ namespace TripleMath {
 			// 
 			// btnLimpiar
 			// 
-			this->btnLimpiar->Location = System::Drawing::Point(10, 550); // Abajo a la izquierda
+			this->btnLimpiar->Location = System::Drawing::Point(10, 550); 
 			this->btnLimpiar->Name = L"btnLimpiar";
 			this->btnLimpiar->Size = System::Drawing::Size(90, 30);
 			this->btnLimpiar->TabIndex = 1;
@@ -141,7 +137,7 @@ namespace TripleMath {
 	}
 	protected:
 		virtual void OnPaint(PaintEventArgs^ e) override {
-			// Dibuja la imagen de fondo si está disponible
+		
 			if (fondo != nullptr) {
 				e->Graphics->DrawImage(fondo, 0, 0, this->ClientSize.Width, this->ClientSize.Height);
 			}
