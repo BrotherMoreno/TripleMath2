@@ -1,5 +1,5 @@
 #pragma once
-#include "UsuarioPuntaje.h" // Incluye la clase de usuario y puntaje
+#include "UsuarioPuntaje.h"
 using namespace System::Collections::Generic;
 
 namespace TripleMath {
@@ -14,38 +14,48 @@ namespace TripleMath {
 	public ref class RankingForm : public System::Windows::Forms::Form
 	{
 	public:
-		// Lista estática para mantener el ranking entre partidas
 		static List<UsuarioPuntaje^>^ ranking = gcnew List<UsuarioPuntaje^>();
-
-	public:
-
-		// Variable estática para guardar el usuario actual
-		static String^ usuarioActual = nullptr;
+		static RankingForm^ instanciaAbierta = nullptr;
 
 		RankingForm(void)
 		{
 			InitializeComponent();
 			this->DoubleBuffered = true;
 			this->ClientSize = System::Drawing::Size(500, 600);
-		}
-		static void RegistrarUsuario(String^ nombre) {
-			usuarioActual = nombre;
-		}
+			this->BackgroundImage = Image::FromFile("FondoHorizontalJuego.jpg");
+			this->BackgroundImageLayout = ImageLayout::Stretch;
 
-		static void AgregarUsuarioPuntajeActual(int puntaje) {
-			if (!String::IsNullOrEmpty(usuarioActual)) {
-				ranking->Add(gcnew UsuarioPuntaje(usuarioActual, puntaje));
+			// Título
+			labelTitulo = gcnew Label();
+			labelTitulo->Text = L"Ranking de Jugadores";
+			labelTitulo->Font = gcnew System::Drawing::Font("Arial", 26, FontStyle::Bold);
+			labelTitulo->ForeColor = Color::DarkBlue;
+			labelTitulo->BackColor = Color::Transparent;
+			labelTitulo->AutoSize = true;
+			labelTitulo->Location = System::Drawing::Point((this->ClientSize.Width - 400) / 2, 20);
+			this->Controls->Add(labelTitulo);
+
+			// Crear labels para el Top 15 debajo del título
+			labels = gcnew array<Label^>(15);
+			for (int i = 0; i < labels->Length; i++) {
+				labels[i] = gcnew Label();
+				labels[i]->AutoSize = true;
+				labels[i]->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
+				labels[i]->ForeColor = Color::Black;
+				labels[i]->BackColor = Color::Transparent;
+				labels[i]->Location = System::Drawing::Point(80, 100 + i * 32);
+				this->Controls->Add(labels[i]);
 			}
 		}
 
-		// Método para agregar cualquier usuario y puntaje al ranking (opcional)
-		void AgregarUsuarioPuntaje(String^ nombre, int puntaje) {
-			ranking->Add(gcnew UsuarioPuntaje(nombre, puntaje));
-		}
-
-		// --- FUNCIÓN AUXILIAR PARA ORDENAR ---
 		static int CompararUsuarios(UsuarioPuntaje^ a, UsuarioPuntaje^ b) {
 			return b->puntaje.CompareTo(a->puntaje);
+		}
+
+		static void ActualizarRankingVisual() {
+			if (instanciaAbierta != nullptr) {
+				instanciaAbierta->MostrarTop();
+			}
 		}
 
 	protected:
@@ -55,85 +65,57 @@ namespace TripleMath {
 			{
 				delete components;
 			}
+			if (instanciaAbierta == this)
+				instanciaAbierta = nullptr;
 		}
 
 	private:
 		System::ComponentModel::Container^ components;
+		array<Label^>^ labels;
+		Label^ labelTitulo;
 
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(RankingForm::typeid));
 			this->SuspendLayout();
-			// 
-			// RankingForm
-			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;   
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(500, 600);
 			this->Cursor = System::Windows::Forms::Cursors::Default;
 			this->Name = L"RankingForm";
 			this->Text = L"Ranking";
 			this->Load += gcnew System::EventHandler(this, &RankingForm::RankingForm_Load);
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &RankingForm::RankingForm_FormClosed);
 			this->ResumeLayout(false);
-
 		}
 #pragma endregion
 
 	private:
 		System::Void RankingForm_Load(System::Object^ sender, System::EventArgs^ e) {
-			this->Invalidate(); // Forzar repintado para mostrar el ranking
+			instanciaAbierta = this;
+			MostrarTop();
 		}
-	private: List<UsuarioPuntaje^>^ LeerRankingDeArchivo() {
-		List<UsuarioPuntaje^>^ lista = gcnew List<UsuarioPuntaje^>();
-		if (System::IO::File::Exists("ranking.txt")) {
-			array<String^>^ lineas = System::IO::File::ReadAllLines("ranking.txt");
-			for each (String ^ linea in lineas) {
-				array<String^>^ partes = linea->Split(',');
-				if (partes->Length == 2) {
-					String^ nombre = partes[0];
-					int puntaje = 0;
-					if (Int32::TryParse(partes[1], puntaje)) {
-						lista->Add(gcnew UsuarioPuntaje(nombre, puntaje));
-					}
+
+		System::Void RankingForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+			if (instanciaAbierta == this)
+				instanciaAbierta = nullptr;
+		}
+
+		void MostrarTop() {
+			List<UsuarioPuntaje^>^ ordenado = gcnew List<UsuarioPuntaje^>(ranking);
+			ordenado->Sort(gcnew Comparison<UsuarioPuntaje^>(CompararUsuarios));
+			for (int i = 0; i < labels->Length; i++) {
+				if (i < ordenado->Count) {
+					labels[i]->Text = (i + 1).ToString() + ". " + ordenado[i]->nombre + " [ " + ordenado[i]->puntaje.ToString() + " ]";
+				}
+				else {
+					labels[i]->Text = "";
 				}
 			}
 		}
-		return lista;
-	}
+
 	protected:
 		virtual void OnPaint(PaintEventArgs^ e) override {
-			e->Graphics->Clear(Color::White);
-
-			String^ titulo = "Ranking de Jugadores";
-			System::Drawing::Font^ fuenteTitulo = gcnew System::Drawing::Font("Arial", 22, FontStyle::Bold);
-			SizeF sizeTitulo = e->Graphics->MeasureString(titulo, fuenteTitulo);
-			float xTitulo = (this->ClientSize.Width - sizeTitulo.Width) / 2;
-			e->Graphics->DrawString(titulo, fuenteTitulo, Brushes::DarkBlue, xTitulo, 30);
-
-			// Leer ranking desde archivo
-			List<UsuarioPuntaje^>^ ordenado = LeerRankingDeArchivo();
-			ordenado->Sort(gcnew Comparison<UsuarioPuntaje^>(CompararUsuarios));
-
-			System::Drawing::Font^ fuente = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
-			int y = 100;
-			int espacio = 35;
-			if (ordenado->Count == 0) {
-				String^ mensaje = "No hay jugadores registrados";
-				SizeF sizeMensaje = e->Graphics->MeasureString(mensaje, fuente);
-				float x = (this->ClientSize.Width - sizeMensaje.Width) / 2;
-				e->Graphics->DrawString(mensaje, fuente, Brushes::Gray, x, y);
-			}
-			else {
-				for (int i = 0; i < ordenado->Count; i++) {
-					String^ linea = (i + 1).ToString() + ". " + ordenado[i]->nombre + " [ " + ordenado[i]->puntaje.ToString() + " ] ";
-					SizeF sizeLinea = e->Graphics->MeasureString(linea, fuente);
-					float x = (this->ClientSize.Width - sizeLinea.Width) / 2;
-					e->Graphics->DrawString(linea, fuente, Brushes::Black, x, y);
-					y += espacio;
-				}
-			}
-
 			Form::OnPaint(e);
 		}
 	};
